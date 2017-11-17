@@ -1,6 +1,7 @@
 package com.trimble.hack2017.data;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.JsonObject;
 import com.trimble.hack2017.transportation.GeoPoint;
@@ -71,6 +72,12 @@ public class TwitterDataProvider implements DataProvider {
 		Response response = httpRequest.request(Method.GET, "/tweets.json?q="+q+"&geocode="+geocode);
  		List<String> matchingTweets = response.getBody().jsonPath().getList("statuses.text");
  		return matchingTweets;
+	}
+
+	public <T> List<T> queryByGeoBounds(GeoPoint start, GeoPoint end,
+			Map<String, Object> params) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

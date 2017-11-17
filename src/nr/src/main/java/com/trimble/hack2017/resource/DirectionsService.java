@@ -2,11 +2,17 @@ package com.trimble.hack2017.resource;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.trimble.hack2017.bus.GoogleDirectionService;
+import com.trimble.hack2017.data.EventbriteDataProvider;
 import com.trimble.hack2017.data.TwitterDataProvider;
 
 public class DirectionsService {
@@ -44,7 +50,8 @@ public class DirectionsService {
 		//			//using waypoints instead	
 		//		
 		////		4.1 Tweeter field
-		JsonObject legs = (JsonObject) routeDetails.get(0).get("legs");
+		routeDetails.get(0);
+		JsonArray legs =  (JsonArray) routeDetails.get(0).get("legs");
 		TwitterDataProvider twitterSource = new TwitterDataProvider();
 //		for(JsonElement segment : legs) {
 //			List<String> tweets = twitterSource.queryByGeoBounds(segment.getAsJsonObject(), 2, knownObstacles);
@@ -58,6 +65,10 @@ public class DirectionsService {
 		//			
 		////		4.3 Local Events Database
 		//			// ----> Imti
+		EventbriteDataProvider eventsProvider = new EventbriteDataProvider();
+		Map<String, String> params = new HashMap<String, String>();
+	//	params.put("startDate", new DateTime().toString(new DateTimeFormat().forPattern("")));
+	//	eventsProvider.queryByGeoBounds(start, end, params);
 		//			
 		////		4.4. Local constructions projects db (schedules)
 		//			// ----> Imti
