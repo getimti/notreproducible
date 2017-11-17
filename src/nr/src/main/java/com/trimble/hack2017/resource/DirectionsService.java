@@ -8,12 +8,14 @@ import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.trimble.hack2017.bus.GoogleDirectionService;
 import com.trimble.hack2017.data.EventbriteDataProvider;
 import com.trimble.hack2017.data.TwitterDataProvider;
+import com.trimble.hack2017.transportation.GeoPoint;
 
 public class DirectionsService {
 
@@ -66,9 +68,17 @@ public class DirectionsService {
 		////		4.3 Local Events Database
 		//			// ----> Imti
 		EventbriteDataProvider eventsProvider = new EventbriteDataProvider();
-		Map<String, String> params = new HashMap<String, String>();
-	//	params.put("startDate", new DateTime().toString(new DateTimeFormat().forPattern("")));
-	//	eventsProvider.queryByGeoBounds(start, end, params);
+		Map<String, Object> params = new HashMap<String, Object>();
+		DateTime dt = new DateTime();
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+		String startDate = fmt.print(dt);
+		dt = dt.plusHours(2); 
+		String endDate = fmt.print(dt);
+		params.put("startDate", startDate);
+		params.put("endDate", endDate);
+		GeoPoint start = new GeoPoint();
+		GeoPoint end = new GeoPoint();
+		eventsProvider.queryByGeoBounds(start, end, params);
 		//			
 		////		4.4. Local constructions projects db (schedules)
 		//			// ----> Imti
