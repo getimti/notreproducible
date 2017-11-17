@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gson.JsonObject;
+import com.trimble.hack2017.internal.enums.Keys;
 import com.trimble.hack2017.transportation.GeoPoint;
 
 import io.restassured.RestAssured;
@@ -23,17 +24,17 @@ public class TwitterDataProvider implements DataProvider {
 	}
 
 	public List<String> queryByGeoBounds(GeoPoint point, int surroundingAreaInMiles, List<String> knownObstacles) {
-		// TODO Auto-generated method stub
-		
 		RestAssured.baseURI = "https://api.twitter.com/1.1";		
 		RequestSpecification httpRequest = RestAssured.given();
-		
 		String q = formQuery(knownObstacles);
 		String geocode=formGeoCode(point, surroundingAreaInMiles);
 		
-		Response response = httpRequest.request(Method.GET, "/tweets.json?q="+q+"&geocode="+geocode);
- 		List<String> matchingTweets = response.getBody().jsonPath().getList("statuses.text");
- 		return matchingTweets;
+		 Response response = httpRequest.auth().oauth(Keys.TW_KEY.toString(), Keys.TW_SECRET.toString(), Keys.TW_TOKEN.toString(), Keys.TW_TOKEN_SECRET.toString())
+				 .get("/search/tweets.json?q="+q+"&geocode="+geocode);
+				 	 
+		 List<String> matchingTweets = response.getBody().jsonPath().getList("statuses.text");
+		 System.out.println(matchingTweets);
+		 return matchingTweets;
 	}
 
 	private String formGeoCode(GeoPoint point, int radius) {

@@ -4,8 +4,10 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.trimble.hack2017.internal.enums.Keys;
 import com.trimble.hack2017.transportation.GeoPoint;
 
@@ -60,12 +62,12 @@ public class GoogleDirectionService {
 		return wayPointName;
 	}
 
-	public List<JsonObject> getRoute(String source,String dest) {		
+	public JsonArray getRoute(String source,String dest) {		
 		RestAssured.baseURI = "https://maps.googleapis.com/maps/api";		
 		RequestSpecification httpRequest = RestAssured.given();
 		Response response = httpRequest.request(Method.GET, "/directions/json?origin="+source+"&destination=" + dest+"&key="+Keys.GOOGLE);
-		List<JsonObject> routes= response.getBody().jsonPath().getList("routes");
-		return routes;
+		String responseStr= response.getBody().asString();
+		JsonParser parser = new JsonParser();
+        return parser.parse(responseStr).getAsJsonObject().get("routes").getAsJsonArray();
 	}
-
 }

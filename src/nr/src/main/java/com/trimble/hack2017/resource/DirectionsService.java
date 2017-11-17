@@ -11,6 +11,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.trimble.hack2017.bus.GoogleDirectionService;
 import com.trimble.hack2017.data.EventbriteDataProvider;
@@ -33,7 +34,7 @@ public class DirectionsService {
 					//using response.steps.legs.endlocation instead
 
 		GoogleDirectionService dirService = new GoogleDirectionService();
-		List<JsonObject> routeDetails = dirService.getRoute(startAddress, endAddress);
+		JsonArray routeDetails = dirService.getRoute(startAddress, endAddress);
 	//	dirService.getAlternateRoute(startAddress, endAddress, new GeoPoint());
 
 		System.out.println("Waypoints "+routeDetails);
@@ -52,13 +53,18 @@ public class DirectionsService {
 		//			//using waypoints instead	
 		//		
 		////		4.1 Tweeter field
-		routeDetails.get(0);
-		JsonArray legs =  (JsonArray) routeDetails.get(0).get("legs");
-		TwitterDataProvider twitterSource = new TwitterDataProvider();
-//		for(JsonElement segment : legs) {
-//			List<String> tweets = twitterSource.queryByGeoBounds(segment.getAsJsonObject(), 2, knownObstacles);
-//			
-//			//if tweets.size() exceeds threshold
+		//routeDetails.get(0);
+		System.out.println("LEGS....." + routeDetails.get(0));
+		JsonArray legs = routeDetails.get(0).getAsJsonObject().get("legs").getAsJsonArray();
+		
+		/*TwitterDataProvider twitterSource = new TwitterDataProvider();
+		for(JsonElement segment : legs) {
+			System.out.println(segment);
+			List<String> tweets = twitterSource.queryByGeoBounds(segment.getAsJsonObject(), 2, knownObstacles);
+			System.out.println(tweets);
+		}*/
+			
+			//if tweets.size() exceeds threshold
 //			// dirService.getAlternateRoute(startAddress,endAddress,wayPointToAvoid);
 //		}
 		//			
@@ -72,13 +78,14 @@ public class DirectionsService {
 		DateTime dt = new DateTime();
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 		String startDate = fmt.print(dt);
-		dt = dt.plusHours(2); 
+		dt = dt.plusHours(2);
 		String endDate = fmt.print(dt);
 		params.put("startDate", startDate);
 		params.put("endDate", endDate);
 		GeoPoint start = new GeoPoint();
 		GeoPoint end = new GeoPoint();
-		eventsProvider.queryByGeoBounds(start, end, params);
+		String test = eventsProvider.queryByGeoBounds1(start, end, params);
+		System.out.println(test);
 		//			
 		////		4.4. Local constructions projects db (schedules)
 		//			// ----> Imti
