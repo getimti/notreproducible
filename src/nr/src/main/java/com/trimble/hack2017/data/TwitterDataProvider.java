@@ -76,7 +76,6 @@ public class TwitterDataProvider implements DataProvider {
 
 	public <T> List<T> queryByGeoBounds(GeoPoint start, GeoPoint end,
 			Map<String, Object> params) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
